@@ -1,12 +1,14 @@
 'use client';
 
-import { useAuth } from '@/context/AuthContext';
-import { useRouter } from 'next/navigation';
 import Button from '@/components/ui/Button';
+import { useAuth } from '@/context/AuthContext';
 import {
-    User, Mail, Shield, Calendar,
-    LogOut, CheckCircle2,
+    CheckCircle2,
+    LogOut,
+    Mail, Shield,
+    User
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 export default function ProfilePage() {
@@ -16,8 +18,14 @@ export default function ProfilePage() {
 
     const handleLogout = async () => {
         setLoggingOut(true);
-        await logout();
-        router.push('/');
+        try {
+            await logout();
+        } catch {
+            // error হলেও proceed করো
+        } finally {
+            setLoggingOut(false);
+            router.push('/');
+        }
     };
 
     if (!user) return null;

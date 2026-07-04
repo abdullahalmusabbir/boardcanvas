@@ -1,60 +1,84 @@
 'use client';
 
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  useCallback,
-} from 'react';
+import { authApi, tokenStorage } from '@/lib/api';
 import { User } from '@/types';
-import { authApi } from '@/lib/api';
+import React, {
+    createContext,
+    useCallback,
+    useContext,
+    useEffect,
+    useState,
+} from 'react';
 
 interface AuthContextType {
-    user: User | null;
-    loading: boolean;
-    login: (email: string, password: string) => Promise<void>;
-    logout: () => Promise<void>;
+  user: User | null;
+  loading: boolean;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-    const [user, setUser] = useState<User | null>(null);
-    const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
-    const fetchMe = useCallback(async () => {
-        try {
-        const me = await authApi.me();
-        setUser(me);
-        } catch {
-        setUser(null);
-        } finally {
-        setLoading(false);
-        }
-    }, []);
+  const fetchMe = useCallback(async () => {
+    // ✅ Token না থাকলে API call করবো না
+    const token = tokenStorage.getAccess();
+    if (!token) {
+      setLoading(false);
+      return;
+    }
 
-    useEffect(() => { fetchMe(); }, [fetchMe]);
+    try {
+      const me = await authApi.me();
+      setUser(me);
+    } catch {
+      // Token invalid - clear করো
+      tokenStorage.clear();
+      setUser(null);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
-    const login = async (email: string, password: string) => {
-        const res = await authApi.login(email, password);
-        setUser(res.user);
-    };
+  useEffect(() => {
+    fetchMe();
+  }, [fetchMe]);
 
-    const logout = async () => {
-        await authApi.logout();
-        setUser(null);
-    };
+  const login = async (email: string, password: string) => {
+    const res = await authApi.login(email, password);
 
-    return (
-        <AuthContext.Provider value={{ user, loading, login, logout }}>
-        {children}
-        </AuthContext.Provider>
-    );
+    // ✅ Token localStorage এ save করো
+    tokenStorage.set(res.access, res.refresh);
+
+    setUser(res.user);
+  };
+
+  const logout = async () => {
+    try {
+      // ✅ Backend এ blacklist করো
+      await authApi.logout();
+    } catch {
+      // Error হলেও local clear করবো
+      console.error('Logout API failed, clearing local tokens');
+    } finally {
+      // ✅ Local token সরাও
+      tokenStorage.clear();
+      setUser(null);
+    }
+  };
+
+  return (
+    <AuthContext.Provider value={{ user, loading, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
 export function useAuth() {
-    const ctx = useContext(AuthContext);
-    if (!ctx) throw new Error('useAuth must be used within AuthProvider');
-    return ctx;
+  const ctx = useContext(AuthContext);
+  if (!ctx) throw new Error('useAuth must be used within AuthProvider');
+  return ctx;
 }

@@ -29,9 +29,14 @@ export default function LandingNavbar() {
     }, []);
 
     const handleLogout = async () => {
-        await logout();
-        setMobileOpen(false);
-        router.push('/');
+        try {
+            await logout();
+        } catch {
+            // Error হলেও proceed করো
+        } finally {
+            setMobileOpen(false);
+            router.push('/');
+        }
     };
 
     return (
