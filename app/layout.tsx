@@ -1,8 +1,8 @@
+import { AuthProvider } from '@/context/AuthContext';
+import { DateProvider } from '@/context/DateContext';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
-import { AuthProvider } from '@/context/AuthContext';
-import { DateProvider } from '@/context/DateContext';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -10,7 +10,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: '404 — Task & Annotate',
+  title: 'VisionBoard',
   description: 'The ultimate task management and image annotation platform',
 };
 
