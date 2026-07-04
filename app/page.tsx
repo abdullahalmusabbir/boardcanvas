@@ -1,14 +1,23 @@
 'use client';
-
-import { useState } from 'react';
-import LandingNavbar from '@/components/landing/LandingNavbar';
 import LandingFooter from '@/components/landing/LandingFooter';
+import LandingNavbar from '@/components/landing/LandingNavbar';
 import LoginModal from '@/components/landing/LoginModal';
+import SignupModal from '@/components/landing/SignupModal';
 import {
-  Zap, ArrowRight, CheckCircle2, Sparkles,
-  LayoutDashboard, ImageIcon, Tag, Calendar,
-  MousePointer2, Shield, Layers, ChevronRight,
+  ArrowRight,
+  Calendar,
+  CheckCircle2,
+  ChevronRight,
+  ImageIcon,
+  Layers,
+  LayoutDashboard,
+  MousePointer2, Shield,
+  Sparkles,
+  Tag,
+  Zap,
 } from 'lucide-react';
+import { useState } from 'react';
+const [signupOpen, setSignupOpen] = useState(false);
 
 /* ─── static data ─────────────────────────────────────────── */
 const stats = [
@@ -268,7 +277,7 @@ export default function HomePage() {
             <div className="flex flex-col sm:flex-row items-center justify-center
                             gap-4 mb-20 animate-slide-up delay-300">
               <button
-                onClick={() => setLoginOpen(true)}
+                onClick={() => setSignupOpen(true)}
                 className="group flex items-center gap-2 px-8 py-3.5
                            bg-indigo-600 hover:bg-indigo-500 text-white
                            font-semibold rounded-2xl text-sm
@@ -496,7 +505,7 @@ export default function HomePage() {
                   no bloat — just clean tools that get things done.
                 </p>
                 <button
-                  onClick={() => setLoginOpen(true)}
+                  onClick={() => setSignupOpen(true)}
                   className="group inline-flex items-center gap-2 px-10 py-4
                              bg-indigo-600 hover:bg-indigo-500 text-white
                              font-bold rounded-2xl text-sm
@@ -520,6 +529,11 @@ export default function HomePage() {
 
       <LandingFooter />
       <LoginModal isOpen={loginOpen} onClose={() => setLoginOpen(false)} />
+        <SignupModal
+            isOpen={signupOpen}
+            onClose={() => setSignupOpen(false)}
+            onSwitchToLogin={() => setLoginOpen(true)}
+        />
     </>
   );
 }

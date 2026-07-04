@@ -1,19 +1,25 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import {
-    X, Mail, Lock, Eye, EyeOff,
-    AlertCircle, Zap, ArrowRight,
+    AlertCircle,
+    ArrowRight,
+    Eye, EyeOff,
+    Lock,
+    Mail,
+    X,
+    Zap,
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
 
 interface LoginModalProps {
     isOpen: boolean;
     onClose: () => void;
+    onSwitchToSignup?: () => void;  // ✅ optional
 }
 
-export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
+export default function LoginModal({ isOpen, onClose, onSwitchToSignup }: LoginModalProps) {
     const { login } = useAuth();
     const router = useRouter();
     const [email, setEmail] = useState('');
@@ -211,7 +217,17 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
 
                 {/* Bottom note */}
                 <p className="text-center text-xs text-[#3a3a5a] mt-6">
-                No account? Contact your admin to get access.
+                    Don&apos;t have an account?{' '}
+                    <button
+                        onClick={() => {
+                            onClose();
+                            onSwitchToSignup?.();
+                        }}
+                        className="text-purple-400 hover:text-purple-300
+                                font-semibold transition-colors"
+                    >
+                        Sign Up
+                    </button>
                 </p>
             </div>
             </div>

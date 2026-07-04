@@ -92,24 +92,24 @@ async function req<T>(endpoint: string, init: RequestInit = {}): Promise<T> {
 
 /* ── Auth ── */
 export const authApi = {
-  login: (email: string, password: string) =>
-    // ✅ এখন access + refresh + user return করবে
-    req<{ message: string; access: string; refresh: string; user: import('@/types').User }>(
-      '/auth/login/',
-      {
-        method: 'POST',
-        body: JSON.stringify({ email, password }),
-      }
-    ),
-
-  // ✅ Logout এ refresh token পাঠাতে হবে
-  logout: () =>
-    req('/auth/logout/', {
-      method: 'POST',
-      body: JSON.stringify({ refresh: tokenStorage.getRefresh() }),
-    }),
-
-  me: () => req<import('@/types').User>('/auth/me/'),
+    login: (email: string, password: string) =>
+        req<{ message: string; user: import('@/types').User }>('/auth/login/', {
+            method: 'POST',
+            body: JSON.stringify({ email, password }),
+        }),
+    signup: (data: {
+        username: string;
+        email: string;
+        password: string;
+        first_name?: string;
+        last_name?: string;
+    }) =>
+        req<{ message: string }>('/auth/signup/', {
+            method: 'POST',
+            body: JSON.stringify(data),
+        }),
+    logout: () => req('/auth/logout/', { method: 'POST' }),
+    me: () => req<import('@/types').User>('/auth/me/'),
 };
 
 /* ── Tasks ── */
