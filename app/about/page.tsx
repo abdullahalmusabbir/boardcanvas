@@ -414,7 +414,7 @@ export default function AboutPage() {
                     </p>
 
                     {/* Social links */}
-                    <div className="flex items-center justify-center gap-3">
+                    {/* <div className="flex items-center justify-center gap-3">
                     {[
                         // { icon: Github, label: 'GitHub', href: '#' },
                         // { icon: Twitter, label: 'Twitter', href: '#' },
@@ -432,7 +432,7 @@ export default function AboutPage() {
                         {label}
                         </a>
                     ))}
-                    </div>
+                    </div> */}
                 </div>
                 </div>
             </div>
