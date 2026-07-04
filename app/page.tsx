@@ -17,7 +17,7 @@ import {
   Zap,
 } from 'lucide-react';
 import { useState } from 'react';
-const [signupOpen, setSignupOpen] = useState(false);
+
 
 /* ─── static data ─────────────────────────────────────────── */
 const stats = [
@@ -208,6 +208,7 @@ function AnnotatePreview() {
 /* ─── main page ────────────────────────────────────────────── */
 export default function HomePage() {
   const [loginOpen, setLoginOpen] = useState(false);
+  const [signupOpen, setSignupOpen] = useState(false);
 
   return (
     <>
