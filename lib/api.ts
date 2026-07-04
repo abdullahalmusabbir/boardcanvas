@@ -1,6 +1,6 @@
 // lib/api.ts
 
-const BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+const BASE = "https://shuvoabdullah.pythonanywhere.com";
 
 // CSRF token cookies থেকে নেওয়া
 function getCsrfToken(): string {
