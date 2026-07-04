@@ -32,24 +32,7 @@ export default function LandingFooter() {
                 The ultimate workspace for teams that want to manage tasks
                 and annotate images — all in one place.
                 </p>
-                {/* Social */}
-                <div className="flex items-center gap-3 mt-6">
-                {[
-                    // { icon: Github, href: '#' },
-                    // { icon: Twitter, href: '#' },
-                    // { icon: Linkedin, href: '#' },
-                ].map(({ icon: Icon, href }) => (
-                    <a
-                    key={href}
-                    href={href}
-                    className="w-9 h-9 glass rounded-xl flex items-center
-                                justify-center text-[#8b8ba7] hover:text-white
-                                hover:border-indigo-500/40 transition-all duration-200"
-                    >
-                    <Icon size={16} />
-                    </a>
-                ))}
-                </div>
+                
             </div>
 
             {/* Links */}
