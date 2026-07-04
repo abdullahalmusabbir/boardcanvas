@@ -412,27 +412,6 @@ export default function AboutPage() {
                     clean architecture, aesthetic UI, and real-world
                     full-stack thinking. Every line written with intention.
                     </p>
-
-                    {/* Social links */}
-                    {/* <div className="flex items-center justify-center gap-3">
-                    {[
-                        // { icon: Github, label: 'GitHub', href: '#' },
-                        // { icon: Twitter, label: 'Twitter', href: '#' },
-                        // { icon: Linkedin, label: 'LinkedIn', href: '#' },
-                    ].map(({ icon: Icon, label, href }) => (
-                        <a
-                        key={label}
-                        href={href}
-                        className="flex items-center gap-2 px-4 py-2 glass
-                                    rounded-xl text-sm text-[#8b8ba7]
-                                    hover:text-white hover:border-indigo-500/40
-                                    transition-all duration-200"
-                        >
-                        <Icon size={14} />
-                        {label}
-                        </a>
-                    ))}
-                    </div> */}
                 </div>
                 </div>
             </div>
