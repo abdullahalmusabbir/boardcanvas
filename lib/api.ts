@@ -120,6 +120,17 @@ export const authApi = {
     }),
 
   me: () => req<import('@/types').User>('/auth/me/'),
+  // ✅ নতুন Google Login method
+  googleLogin: (credential: string) =>
+    req<{
+      message: string;
+      access: string;
+      refresh: string;
+      user: import('@/types').User;
+    }>('/auth/google/', {
+      method: 'POST',
+      body: JSON.stringify({ credential }),
+    }),
 };
 
 /* ── Tasks ── */

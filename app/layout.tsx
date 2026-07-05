@@ -1,5 +1,6 @@
 import { AuthProvider } from '@/context/AuthContext';
 import { DateProvider } from '@/context/DateContext';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
@@ -14,6 +15,9 @@ export const metadata: Metadata = {
   description: 'The ultimate task management and image annotation platform',
 };
 
+// Client ID একবারই define করো
+const GOOGLE_CLIENT_ID = "227007777660-5ihtn2ia72211l06bgtq3ppgrn53sn3a.apps.googleusercontent.com";
+
 export default function RootLayout({
   children,
 }: {
@@ -22,11 +26,13 @@ export default function RootLayout({
   return (
     <html lang="en" data-scroll-behavior="smooth" className={inter.variable}>
       <body className="font-sans antialiased bg-[#0a0a0f] text-white">
-        <AuthProvider>
-          <DateProvider>
-            {children}
-          </DateProvider>
-        </AuthProvider>
+        <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+          <AuthProvider>
+            <DateProvider>
+              {children}
+            </DateProvider>
+          </AuthProvider>
+        </GoogleOAuthProvider>
       </body>
     </html>
   );

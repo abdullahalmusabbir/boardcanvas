@@ -3,17 +3,22 @@
 import { authApi, tokenStorage } from '@/lib/api';
 import { User } from '@/types';
 import React, {
-    createContext,
-    useCallback,
-    useContext,
-    useEffect,
-    useState,
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
 } from 'react';
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
+  loginWithData: (data: {
+    access: string;
+    refresh: string;
+    user: User;
+  }) => void;
   logout: () => Promise<void>;
 }
 
@@ -24,18 +29,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   const fetchMe = useCallback(async () => {
-    // ✅ Token না থাকলে API call করবো না
     const token = tokenStorage.getAccess();
     if (!token) {
       setLoading(false);
       return;
     }
-
     try {
       const me = await authApi.me();
       setUser(me);
     } catch {
-      // Token invalid - clear করো
       tokenStorage.clear();
       setUser(null);
     } finally {
@@ -49,29 +51,33 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = async (email: string, password: string) => {
     const res = await authApi.login(email, password);
-
-    // ✅ Token localStorage এ save করো
     tokenStorage.set(res.access, res.refresh);
-
     setUser(res.user);
+  };
+
+  // ✅ Google Login এর জন্য নতুন method
+  const loginWithData = (data: {
+    access: string;
+    refresh: string;
+    user: User;
+  }) => {
+    tokenStorage.set(data.access, data.refresh);
+    setUser(data.user);
   };
 
   const logout = async () => {
     try {
-      // ✅ Backend এ blacklist করো
       await authApi.logout();
     } catch {
-      // Error হলেও local clear করবো
       console.error('Logout API failed, clearing local tokens');
     } finally {
-      // ✅ Local token সরাও
       tokenStorage.clear();
       setUser(null);
     }
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, loginWithData, logout }}>
       {children}
     </AuthContext.Provider>
   );
