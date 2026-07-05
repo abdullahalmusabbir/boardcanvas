@@ -1,7 +1,6 @@
 // lib/api.ts
 const BASE = "https://shuvoabdullah.pythonanywhere.com";
 
-// ✅ JWT Token helpers - localStorage তে store করবো
 export const tokenStorage = {
   getAccess: (): string | null => {
     if (typeof window === 'undefined') return null;
@@ -21,7 +20,6 @@ export const tokenStorage = {
   },
 };
 
-// ✅ Token refresh করার function
 async function refreshAccessToken(): Promise<string | null> {
   const refresh = tokenStorage.getRefresh();
   if (!refresh) return null;
@@ -48,7 +46,6 @@ async function refreshAccessToken(): Promise<string | null> {
   }
 }
 
-// ✅ Main request function - CSRF সরিয়ে JWT দিলাম
 async function req<T>(endpoint: string, init: RequestInit = {}): Promise<T> {
   let accessToken = tokenStorage.getAccess();
 
@@ -57,7 +54,6 @@ async function req<T>(endpoint: string, init: RequestInit = {}): Promise<T> {
       ...init,
       headers: {
         'Content-Type': 'application/json',
-        // ✅ Bearer token header
         ...(token && { Authorization: `Bearer ${token}` }),
         ...init.headers,
       },
@@ -65,8 +61,6 @@ async function req<T>(endpoint: string, init: RequestInit = {}): Promise<T> {
   };
 
   let res = await makeRequest(accessToken);
-
-  // ✅ 401 হলে token refresh করে retry করো
   if (res.status === 401 && accessToken) {
     const newToken = await refreshAccessToken();
     if (newToken) {
@@ -93,7 +87,6 @@ async function req<T>(endpoint: string, init: RequestInit = {}): Promise<T> {
 /* ── Auth ── */
 export const authApi = {
   login: (email: string, password: string) =>
-    // ✅ এখন access + refresh + user return করবে
     req<{ message: string; access: string; refresh: string; user: import('@/types').User }>(
       '/auth/login/',
       {
@@ -112,7 +105,6 @@ export const authApi = {
             method: 'POST',
             body: JSON.stringify(data),
         }),
-  // ✅ Logout এ refresh token পাঠাতে হবে
   logout: () =>
     req('/auth/logout/', {
       method: 'POST',
@@ -120,7 +112,6 @@ export const authApi = {
     }),
 
   me: () => req<import('@/types').User>('/auth/me/'),
-  // ✅ নতুন Google Login method
   googleLogin: (credential: string) =>
     req<{
       message: string;
@@ -201,8 +192,6 @@ export const imageApi = {
     const res = await fetch(`${BASE}/images/`, {
       method: 'POST',
       headers: {
-        // ✅ Content-Type দেবো না (multipart এর জন্য)
-        // ✅ JWT header দিচ্ছি
         ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
       },
       body: formData,
