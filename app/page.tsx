@@ -4,6 +4,7 @@ import LandingFooter from '@/components/landing/LandingFooter';
 import LandingNavbar from '@/components/landing/LandingNavbar';
 import LoginModal from '@/components/landing/LoginModal';
 import SignupModal from '@/components/landing/SignupModal'; 
+import ForgotPasswordModal from '@/components/landing/ForgotPasswordModal';
 import {
   ArrowRight,
   Calendar,
@@ -206,6 +207,7 @@ function AnnotatePreview() {
 export default function HomePage() {
     const [loginOpen,  setLoginOpen]  = useState(false);
     const [signupOpen, setSignupOpen] = useState(false); 
+    const [forgotOpen, setForgotOpen] = useState(false);
 
     return (
         <>
@@ -271,7 +273,7 @@ export default function HomePage() {
                         <div className="flex flex-col sm:flex-row items-center
                                         justify-center gap-4 mb-20
                                         animate-slide-up delay-300">
-                            {/* ✅ Get Started → signup */}
+                            {/* Get Started → signup */}
                             <button
                                 onClick={() => setSignupOpen(true)}
                                 className="group flex items-center gap-2 px-8 py-3.5
@@ -539,6 +541,12 @@ export default function HomePage() {
                 isOpen={loginOpen} 
                 onClose={() => setLoginOpen(false)}
                 onSwitchToSignup={() => setSignupOpen(true)}  
+                onForgotPassword={() => setForgotOpen(true)}
+            />
+            <ForgotPasswordModal
+                isOpen={forgotOpen}
+                onClose={() => setForgotOpen(false)}
+                onSwitchToLogin={() => setLoginOpen(true)}
             />
             <SignupModal
                 isOpen={signupOpen}

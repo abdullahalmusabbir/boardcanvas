@@ -131,6 +131,30 @@ export const authApi = {
       method: 'POST',
       body: JSON.stringify({ credential }),
     }),
+    forgotPasswordRequest: (email: string) =>
+      req<{ message: string }>('/auth/forgot-password/', {
+        method: 'POST',
+        body: JSON.stringify({ email }),
+      }),
+
+    forgotPasswordVerify: (email: string, otp: string) =>
+      req<{ message: string; reset_token: string }>(
+        '/auth/forgot-password/verify/',
+        {
+          method: 'POST',
+          body: JSON.stringify({ email, otp }),
+        }
+      ),
+
+    forgotPasswordReset: (
+      email: string,
+      reset_token: string,
+      new_password: string
+    ) =>
+      req<{ message: string }>('/auth/forgot-password/reset/', {
+        method: 'POST',
+        body: JSON.stringify({ email, reset_token, new_password }),
+      }),
 };
 
 /* ── Tasks ── */

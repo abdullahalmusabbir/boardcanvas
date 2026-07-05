@@ -7,7 +7,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import LoginModal from './LoginModal';
 import SignupModal from './SignupModal'; 
-
+import ForgotPasswordModal from './ForgotPasswordModal';
 const navLinks = [
     { href: '/',         label: 'Home' },
     { href: '/about',    label: 'About' },
@@ -18,6 +18,7 @@ export default function LandingNavbar() {
     const pathname = usePathname();
     const router   = useRouter();
     const { user, loading, logout } = useAuth();
+    const [forgotOpen, setForgotOpen] = useState(false);
 
     const [scrolled,    setScrolled]    = useState(false);
     const [mobileOpen,  setMobileOpen]  = useState(false);
@@ -130,7 +131,7 @@ export default function LandingNavbar() {
                             ) : (
                                 /* ── not logged in ── */
                                 <div className="flex items-center gap-2">
-                                    {/* ✅ Sign Up button */}
+                                    {/*  Sign Up button */}
                                     <button
                                         onClick={() => setSignupOpen(true)}
                                         className="px-5 py-2 rounded-xl text-sm font-semibold
@@ -235,7 +236,7 @@ export default function LandingNavbar() {
                                     </>
                                 ) : (
                                     <>
-                                        {/* ✅ Sign Up mobile */}
+                                        {/*  Sign Up mobile */}
                                         <button
                                             onClick={() => {
                                                 setMobileOpen(false);
@@ -279,6 +280,10 @@ export default function LandingNavbar() {
                     setLoginOpen(false);
                     setSignupOpen(true);
                 }}
+                onForgotPassword={() => {
+                    setLoginOpen(false);
+                    setForgotOpen(true);
+                }}
             />
             <SignupModal
                 isOpen={signupOpen}
@@ -286,6 +291,14 @@ export default function LandingNavbar() {
                 onSwitchToLogin={() => {
                     setSignupOpen(false);
                     setLoginOpen(true);
+                }}
+            />
+            <ForgotPasswordModal
+                isOpen={forgotOpen}
+                onClose={() => setForgotOpen(false)}
+                onSwitchToLogin={() => {
+                setForgotOpen(false);
+                setLoginOpen(true);
                 }}
             />
         </>

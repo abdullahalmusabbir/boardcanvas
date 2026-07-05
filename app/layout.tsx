@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   description: 'The ultimate task management and image annotation platform',
 };
 
-// Client ID একবারই define করো
+// Client ID একবারই define করা হয়েছে, যাতে এটি একাধিকবার define না হয়।
 const GOOGLE_CLIENT_ID = "227007777660-5ihtn2ia72211l06bgtq3ppgrn53sn3a.apps.googleusercontent.com";
 
 export default function RootLayout({
